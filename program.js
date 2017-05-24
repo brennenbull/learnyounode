@@ -10,6 +10,8 @@
 
 const fs = require('fs');
 const path = require('path');
+const mymodule = require('./mymodule.js');
+
 
 // <--My first I/0-->
 
@@ -27,14 +29,28 @@ const path = require('path');
 
 // <--Filtered LS-->
 
+// let ext = process.argv[3];
+// fs.readdir(process.argv[2],function(err, list){
+//   if(err){
+//     console.log(err)
+//   }
+//   for(let i = 0; i < list.length; i++){
+//     if(path.extname(list[i]) == '.' + ext){
+//       console.log(list[i]);
+//     }
+//   }
+// });
+
+// <--Make it Modular--->
+let directory = process.argv[2];
 let ext = process.argv[3];
-fs.readdir(process.argv[2],function(err, list){
-  if(err){
-    console.log(err)
+var callback = function (err, list) {
+  if (err){
+    console.log(err);
   }
-  for(let i = 0; i < list.length; i++){
-    if(path.extname(list[i]) == '.' + ext){
-      console.log(list[i]);
-    }
-  }
-});
+  list.forEach(function (file) {
+      console.log(file);
+  })
+};
+
+mymodule(directory, ext, callback);
