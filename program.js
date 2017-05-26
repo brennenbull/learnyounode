@@ -64,3 +64,18 @@ const mymodule = require('./mymodule.js');
 //     console.log(data);
 //   })
 //
+
+//<-----------------HTTP COLLECT---------->
+
+let url = process.argv[2];
+http.get(url, function (response){
+  response.setEncoding('utf8');
+  let string = '';
+  response.on('data', function(word){
+    string += word;
+  });
+  response.on('end', function(){
+    console.log(string.length);
+    console.log(string);
+  });
+});
