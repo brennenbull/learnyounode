@@ -67,15 +67,68 @@ const mymodule = require('./mymodule.js');
 
 //<-----------------HTTP COLLECT---------->
 
-let url = process.argv[2];
-http.get(url, function (response){
+// let url = process.argv[2];
+// http.get(url, function (response){
+//   response.setEncoding('utf8');
+//   let string = '';
+//   response.on('data', function(word){
+//     string += word;
+//   });
+//   response.on('end', function(){
+//     console.log(string.length);
+//     console.log(string);
+//   });
+// });
+
+
+//<---------------JUGGLING ASYNC---------->>>>>
+
+let url1 = process.argv[2];
+let url2 = process.argv[3];
+let url3 = process.argv[4];
+let url1string = "";
+let url2string = "";
+let url3string = "";
+
+let url2function = function(){
+  http.get(url2 , function(response){
+    response.setEncoding('utf8');
+    let string = '';
+    response.on('data', function(word){
+      string += word;
+    });
+    response.on('end', function(){
+      url2string = string;
+      console.log(url2string);
+      url3function();
+    })
+  });
+}
+
+let url3function = function(){
+  http.get(url3 , function(response){
+    response.setEncoding('utf8');
+    let string = '';
+    response.on('data', function(word){
+      string += word;
+    });
+    response.on('end', function(){
+      url3string = string;
+      console.log(url3string)
+    })
+  });
+}
+
+
+http.get(url1 , function(response){
   response.setEncoding('utf8');
   let string = '';
   response.on('data', function(word){
     string += word;
   });
   response.on('end', function(){
-    console.log(string.length);
-    console.log(string);
-  });
+    url1string = string;
+    console.log(url1string);
+    url2function();
+  })
 });
